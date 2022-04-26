@@ -3,11 +3,16 @@ from . import views
 from . import forms
 from . import models
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 # Create your views here.
 
 def sign_up(request):
+
+    if request.user.is_authenticated:
+        return redirect('home')
+
     page = 'sign_up'
     form = forms.CreateUserForm()
     if request.method=="POST":
@@ -21,7 +26,10 @@ def sign_up(request):
             return redirect('home')
     return render(request,'users/login_register.html',{'title':'Sign Up','form':form,'page':page})
 
+
 def sign_in(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     form = forms.UserSignInForm()
     if request.method == 'POST':
         form = forms.UserSignInForm(request.POST)
@@ -42,6 +50,19 @@ def sign_in(request):
 
     return render(request,'users/login_register.html',{'title':'Sign In','form':form})
 
+@login_required(login_url='sign-in')
 def sign_out(request):
     logout(request)
     return redirect('sign-in')
+
+@login_required(login_url='sign-in')
+def edit_profile(request):
+    current_user = models.Profile.objects.get(user=request.user)
+    print(current_user)
+    form = forms.EditProfileForm(instance=current_user)
+    if request.method == "POST":
+        form = forms.EditProfileForm(request.POST,request.FILES,instance=current_user)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    return render(request,'users/profile.html',{'form':form})
