@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
 from . import views
-from . import forms
+from  . import forms
 from . import models
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from posts import forms as pForms
 
 # Create your views here.
 
@@ -65,4 +66,16 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             return redirect('home')
-    return render(request,'users/profile.html',{'form':form})
+    return render(request,'users/profile_edit.html',{'form':form})
+
+@login_required(login_url="sign-in")
+def info_profile(request):
+    form = pForms.PostForm()
+    if request.method == "POST":
+        form = pForms.PostForm(request.POST,request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            print(post)
+    return render(request,'users/profile_info.html',{'form':form})

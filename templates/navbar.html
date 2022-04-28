@@ -21,7 +21,7 @@
                 <img class="nav-profile"  src="{% static 'guest-user.jpg' %}" alt="default pic">
               {% endif %}
             </a> -->
-            <a class="nav-link" href="{% url 'edit-profile' %}">Hello, {{ request.user.username }}</a>
+            <a class="nav-link" href="{% url 'info-profile' %}">Hello, {{ request.user.username }}</a>
           </li>
 
       </ul>

@@ -1,0 +1,57 @@
+{% extends 'main.html' %}
+{% load crispy_forms_tags %}
+{% block title %} {{ request.user.profile.full_name }}|(@{{ request.user.username }}) {% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+        <img src="{{ request.user.profile.profile_pic.url }}" width="250px" height="250px" style="object-fit:cover;" alt="profile pic">
+    </div>
+    <div class="col-sm-8">
+      <h3>Hi There {{ request.user.username }} <a href="{% url 'edit-profile' %}" class="btn btn-secondary">Edit Profile</a>  </h3>
+      <br>
+      <h4>{{ request.user.post.count }} posts &nbsp; &nbsp; {{ request.user.followers.count }} Followers &nbsp; &nbsp; {{ request.user.following.count }} Following</h4>
+      <br>
+      <h2> {{ request.user.profile.full_name }} </h2>
+      <p class="lead"> {{ request.user.profile.description }} </p>
+    </div>
+  </div>
+  <br>
+  <hr>
+  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Post a Photo
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Post A Photo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <input type="submit" class="btn btn-primary btn-block">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="container">
+  <div class="row">
+    {% for post in request.user.post.all %}
+      <img src="{{ post.image.url }}" alt="post.caption" class="post-image">
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
