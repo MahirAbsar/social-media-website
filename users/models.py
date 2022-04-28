@@ -17,6 +17,6 @@ class Profile(models.Model):
         return self.user.username
 
 class Follow(models.Model):
-    followers = models.ForeignKey(User,on_delete=models.CASCADE,related_name="followers")
-    following = models.ForeignKey(User,on_delete=models.CASCADE,related_name="following")
+    following = models.ForeignKey(User,on_delete=models.CASCADE,related_name="following",null=True,blank=True)
+    follower = models.ForeignKey(User,on_delete=models.CASCADE,related_name="follower",null=True,blank=True)
     follow_date = models.DateTimeField(auto_now_add=True)

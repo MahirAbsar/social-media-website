@@ -23,8 +23,11 @@
             </a> -->
             <a class="nav-link" href="{% url 'info-profile' %}">Hello, {{ request.user.username }}</a>
           </li>
-
       </ul>
+      <form class="d-flex ms-auto" method="GET" action="{% url 'home' %}">
+        <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
       <!-- <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>

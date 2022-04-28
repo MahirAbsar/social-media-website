@@ -1,4 +1,5 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,reverse
+from django.http import HttpResponseRedirect
 from . import views
 from  . import forms
 from . import models
@@ -79,3 +80,30 @@ def info_profile(request):
             post.save()
             print(post)
     return render(request,'users/profile_info.html',{'form':form})
+
+@login_required(login_url='sign-in')
+def user_other(request,username):
+    get_user = User.objects.get(username=username)
+    already_followed = models.Follow.objects.filter(follower=request.user,following=get_user)
+    if get_user==request.user:
+        return redirect('info-profile')
+    return render(request,'users/user_other.html',{'get_user':get_user,'already_followed':already_followed})
+
+@login_required(login_url='sign-in')
+def follow(request,username):
+    following_user = User.objects.get(username=username)
+    follower_user = request.user
+    already_followed = models.Follow.objects.filter(follower = follower_user,following= following_user)
+    if not already_followed:
+        followed_user = models.Follow(follower = follower_user,following=following_user)
+        followed_user.save()
+    return HttpResponseRedirect(reverse('user-other',kwargs={'username':username}))
+    # return redirect('user-other')
+@login_required(login_url='sign-in')
+def unfollow(request,username):
+    following_user = User.objects.get(username=username)
+    follower_user = request.user
+    already_followed = models.Follow.objects.filter(follower = follower_user,following= following_user)
+    already_followed.delete()
+    return HttpResponseRedirect(reverse('user-other',kwargs={'username':username}))
+    # return redirect('user-other')

@@ -11,7 +11,7 @@
     <div class="col-sm-8">
       <h3>Hi There {{ request.user.username }} <a href="{% url 'edit-profile' %}" class="btn btn-secondary">Edit Profile</a>  </h3>
       <br>
-      <h4>{{ request.user.post.count }} posts &nbsp; &nbsp; {{ request.user.followers.count }} Followers &nbsp; &nbsp; {{ request.user.following.count }} Following</h4>
+      <h4>{{ request.user.post.count }} posts &nbsp; &nbsp; {{ request.user.following.count }} Followers &nbsp; &nbsp; {{ request.user.follower.count }} Following</h4>
       <br>
       <h2> {{ request.user.profile.full_name }} </h2>
       <p class="lead"> {{ request.user.profile.description }} </p>
