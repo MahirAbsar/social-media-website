@@ -19,20 +19,46 @@
     <br>
     {% endfor %}
     {% else %}
-    {% for author in following_list %}
-    {% for post in author.following.post.all %}
-    <div style="border:1px solid #888888;">
-      <div style="padding:10px">
-        <img src="{{ post.author.profile.profile_pic.url }}" alt="" width="40px" height="40px">
-        <a href="{% url 'user-other username=post.author' %}">{{post.author}}</a>
+    <div class='row'>
+      <div class="col-sm-8">
+        {% for author in following_list %}
+        {% for post in author.following.post.all %}
+        <div style="border:1px solid #888888;">
+          <div style="padding:10px">
+            <img src="{{ post.author.profile.profile_pic.url }}" alt="" width="40px" height="40px"/>
+            {{post.author}}
+            <br>
+          </div>
+          <img src="{{ post.image.url }}" alt="" width="100%"/>
+          <br>
+          <div style="padding:20px;">
+            {% if post.pk in liked_post_list %}
+            <a href="{% url 'unliked' post.pk %}">
+              <i class="fa-solid fa-thumbs-down" style="font-size:36px;"></i>
+            </a>
+            {% else %}
+            <a href="{% url 'liked' post.pk %}">
+              <i class="fa-brands fa-gratipay" style="font-size:36px;"></i>
+            </a>
+            {% endif %}
+          </div>
+
+        </div>
         <br>
-        <img src="{{ post.image.url }}" alt="" width="100%">
+        <br>
+        {% endfor %}
       </div>
     </div>
-    <br>
-    <br>
     {% endfor %}
-  </div>
-</div>
+      </div>
+      <div class="col-sm-4">
+        <div class="row">
+          <div class="col-sm-4">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
 {% endif %}
 {% endblock %}
